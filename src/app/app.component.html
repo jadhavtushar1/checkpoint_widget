@@ -21,15 +21,7 @@
       </div>
     </div>
     <div class="checkpoint_parent">
-      <!-- <div *ngFor="let element of prize;let i=index">
-        <form class="form" [formGroup]="element">
-        <div class="input-group mb-3">
-          <label class="input-group-text">Add checkpoint</label>
-          <input (change)="handleRouteChange($event)" type="file" class="form-control" id="inputGroupFile02"><span
-            (click)="handleAddMore()" class="input-group-text">+</span>
-        </div>
-      </form>
-      </div> -->
+  
       <div class="tab" *ngFor="let formGroupName of checkpointGroup; let i=index">
         <form [formGroup]="formGroupName">
           <div class="input-group mb-3">
@@ -44,10 +36,7 @@
               <option value="4">Placeholder</option>
             </select>
             <input (change)="handlebackgroundImage($event,i)" type="file" class="form-control" id="inputGroupFile02">
-            <span class="input-group-text" id="inputGroup-sizing-sm"> 
-             X : {{formGroupName.get('left').value}}
-            </span>
-            <span class="input-group-text" id="inputGroup-sizing-sm">Y : {{formGroupName.get('top').value}}
+            <span class="input-group-text" id="inputGroup-sizing-sm">
               <label class="form-check-label edt_text" for="flexSwitchCheckChecked">size</label>
               <div class="form-check form-switch form_data_switch form_view">
               <input type="number" placeholder="size" (change)="handleSizeChange($event,i)" [value]="fix_height" class="form-control" aria-label="" style="width: 100px; height: 25px;">
@@ -57,6 +46,26 @@
             <button type="button" class="btn btn-danger" (click)="handleDelete(i)">X</button>
 
           </div>
+          <div class="children_parent">
+          <div *ngFor="let el of formGroupName.value.children;let b=index"  class="children_form_data" >
+            <form [formGroup]="formGroupName">
+              <div class="input-group mb-3 " >
+                <button type="button" class="btn btn-primary">{{b+1}}</button>
+                <label class="input-group-text">Child</label>
+                
+                <input (change)="handlebackgroundImage($event,i)" type="file" class="form-control" id="inputGroupFile02">
+                <span class="input-group-text" id="inputGroup-sizing-sm">
+                  <label class="form-check-label edt_text" for="flexSwitchCheckChecked">size</label>
+                  <div class="form-check form-switch form_data_switch form_view">
+                  <input type="number" placeholder="size" (change)="handleSizeChange($event,i)" [value]="fix_height" class="form-control" aria-label="" style="width: 100px; height: 25px;">
+                </div>
+                </span>
+                <button type="button" class="btn btn-danger" (click)="handleDelete(i)">X</button>
+    
+              </div>
+            </form>
+          </div>
+        </div>
         </form>
       </div>
       <div style="display: flex;justify-content: space-between;">
@@ -69,7 +78,7 @@
   </div>
   <div class="preview">
     <p *ngIf="payload && isPreviewOpen" class="fw-bolder">Showing Preview</p>
-    <div *ngIf="payload && isPreviewOpen" class="preview_main " [class.resize]="payload" [style.height.px]="parentHeight" [style.width.px]="parentWidth">
+    <!-- <div *ngIf="payload && isPreviewOpen" class="preview_main " [class.resize]="payload" [style.height.px]="parentHeight" [style.width.px]="parentWidth">
       <div [style.backgroundImage]="'url(' + payload.background_image + ')'" class="preview_bg">
         <div [style.backgroundImage]="'url(' + payload.route + ')'" class="path_parent" >
           <div *ngFor="let formGroupName of payload.checkpoints; let i=index">
@@ -78,13 +87,11 @@
               (mousedown)="onMouseDown($event, i)"
               [style.backgroundImage]="'url(' + formGroupName.checkpointImage + ')'"
                 [style.left.%]="formGroupName.checkpointLeftPercentage" [style.height.%]="formGroupName.checkpointHeightPercentage" [style.top.%]="formGroupName.checkpointTopPercentage">
-                <!-- <div class="resizable_div">
-              </div> -->
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
  
     <p *ngIf="!payload || !isPreviewOpen" class="fw-bolder">Editing</p>
     <div *ngIf="!payload || !isPreviewOpen" class="preview_main " [style.height.px]="parentHeight" [style.width.px]="parentWidth">

@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormArray, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -17,7 +17,6 @@ export class AppComponent {
   selectedFile: File | null = null;
   imagePreview: string | null = null;
   checkpointGroup: UntypedFormGroup[] = []
-  checkpoint: UntypedFormGroup
   element
   private isDragging = false;
   private currentDraggingIndex = -1;
@@ -36,9 +35,7 @@ export class AppComponent {
   ngOnInit() { 
     this.handleAddMore()
   }
-  handleCheckpointElement(i){
-    console.log(i)
-  }
+
   handleSizeChange(event, i: any) {
     const currentFormGroup = this.checkpointGroup[i];
     const heights = this.route.nativeElement.offsetHeight;
@@ -50,17 +47,6 @@ export class AppComponent {
     this.cdr.detectChanges();
   }
 
-  addInitialCheckpoint() {
-    const data = this.formdata.group({
-      image: [''],
-      top: [0],
-      left: [0],
-      topPerc: [0],
-      leftPerc: [0],
-      isDragging: [false]
-    });
-    this.checkpointGroup.push(data);
-  }
   handleDelete(i: number) {
     this.checkpointGroup.splice(i, 1)
 
@@ -74,20 +60,7 @@ export class AppComponent {
     const target = e.target as HTMLInputElement;
     this.parentWidth = Number(target.value);
   }
-  handleAddMore() {
-    const form = this.formdata.group({
-      image: [''],
-      top: [0],
-      left: [0],
-      height: [70],
-      width: [0],
-      topPerc: [0],
-      leftPerc: [0],
-      isDragging: [false],
-      heightPerc:[this.fix_height]
-    });
-    this.checkpointGroup.push(form);
-  }
+
 
   onMouseDown(event: MouseEvent, index: number): void {
     this.isDragging = true;
@@ -132,7 +105,7 @@ export class AppComponent {
   handleRouteChange(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      console.log("Selected file:", file);
+      
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const backgroundImageUrl = e.target.result;
@@ -146,7 +119,7 @@ export class AppComponent {
   handleFileChange(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      console.log("Selected file:", file);
+
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const backgroundImageUrl = e.target.result;
@@ -158,6 +131,7 @@ export class AppComponent {
   }
   
   handleSubmit() {
+
     this.isPreviewOpen=!this.isPreviewOpen
     let checkpointdata = [];
     for (let i = 0; i < this.checkpointGroup.length; i++) {
@@ -185,7 +159,7 @@ export class AppComponent {
     
     const file = target.files[0];
     if (file) {
-      console.log("Selected file:", file);
+
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const backgroundImageUrl = e.target.result;
@@ -197,6 +171,37 @@ export class AppComponent {
     }
 
     this.cdr.detectChanges();
+  }
+  handleAddMore() {
+ 
+    const form = this.formdata.group({
+      image: [''],
+      top: [0],
+      left: [0],
+      height: [70],
+      width: [0],
+      topPerc: [0],
+      leftPerc: [0],
+      isDragging: [false],
+      heightPerc:[this.fix_height],
+      children: this.formdata.array([])
+     
+    });
+    this.checkpointGroup.push(form);
+  }
+  handleCheckpointElement(i){
+  
+    const form = this.formdata.group({
+      image: [''],
+      top: [0],
+      left: [0],
+      height: [70],
+      width: [0],
+    });
+    
+    const childrenArray = this.checkpointGroup[i].get('children') as FormArray;
+    childrenArray.push(form)
+    
   }
 
 }
